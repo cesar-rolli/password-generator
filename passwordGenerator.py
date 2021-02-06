@@ -1,93 +1,66 @@
 import random
 from tkinter import *
-import string
-from tkinter import messagebox
 from tkinter.ttk import *
 
-#Create GUI window
 root = Tk()
-var = IntVar()
-var1 = IntVar()
+lengthEntry = IntVar()
+passwordType = IntVar()
 
-#Function for copying password to clipboard
-def copy1():
-  random_pswd = entry.get()
+def copyPasswordToClipboard():
+  generatedPassword = passwordOutput.get()
   root.clipboard_clear()
-  root.clipboard_append(random_pswd)
+  root.clipboard_append(generatedPassword)
 
-#Funciton for generation of password
 def generate():
-  password1 = low()
-  entry.insert(10, password1)
+  password1 = passwordGeneration()
+  passwordOutput.insert(10, password1)
 
+def passwordGeneration():
+  passwordOutput.delete(0, END)
 
-def low():
-  entry.delete(0, END)
+  length = int(lengthEntry.get())
 
-  #Get the length of password
-  length = var1.get()
-  lower = "abcdefghijklmnopqrstuvwxyz"
-  upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  allCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ[]{}()!@#$%&*,.;:?/-_=+"
   numbers = "0123456789"
-  symbols = "[]{}()!@#$%&*,.;:?/-_=+"
-  password=""
-    
-  #if strength selected is low
-  if var.get() == 1:
-    for i in range(0, length):
-      password = password + random.choice(lower)
-    return password 
+  password = ""
 
-  #if strength selected is medium
-  if var.get() == 0:
+  #If the type includes all characters
+  if passwordType.get() == 0:
     for i in range(0, length):
-      password = password + random.choice(lower) + random.choice(lower)
+      password += random.choice(allCharacters + numbers)
     return password
-        
-  #if strength selected is strong
-  if var.get() == 3:
+  
+  #If the type is only numbers
+  if passwordType.get() == 1:
     for i in range(0, length):
-      password = password + random.choice(lower) + random.choice(lower) + random.choice(numbers) + random.choice(symbols)
+      password += random.choice(numbers)
     return password
 
-  else:
-    messagebox.showwarning('Python Says', 'First select any option')
-
-
-
+# # GUI # #
 #Title of GUI window
 root.title("Password Generator")
 
-#Create label and entry to show
-Random_password = Label(root, text = "Password")
-Random_password.grid(row = 0)
-entry = Entry(root)
-entry.grid(row = 0, column = 1)
-
 #Create label for length of password
-c_label = Label(root, text = "Length")
-c_label.grid(row = 1)
+lengthLabel = Label(root, text = "Length")
+lengthLabel.grid(row = 0, column = 0)
+lengthEntry = Entry(root)
+lengthEntry.grid(row = 0, column = 1)
+generateButton = Button(root, text = "Generate", command = generate)
+generateButton.grid(row = 0, column = 2)
 
-#Create buttons
-copy_buttons = Button(root, text = "Copy", command = copy1)
-copy_buttons.grid(row = 0, column = 2)
-generate_button = Button(root, text = "Generate", command = generate)
-generate_button.grid(row = 0, column = 3)
-exit_button = Button (root, text = "Exit", command = root.quit)
-exit_button.grid(row = 0, column = 4)
+copy_buttons = Button(root, text = "Copy", command = copyPasswordToClipboard)
+copy_buttons.grid(row = 1, column = 2)
 
-#Radio buttons
-radio_low = Radiobutton(root, text = "Low", variable = var, value =1)
-radio_low.grid(row = 1, column = 2, sticky = "E")
-radio_middle = Radiobutton(root, text = "Medium", variable = var, value = 0)
-radio_middle.grid(row = 1, column = 3, sticky = "E")
-radio_strong = Radiobutton(root, text = "Strong", variable = var, value = 3)
-radio_strong.grid(row = 1, column = 3, sticky = "E")
-combo = Combobox(root, textvariable = var1)
+#Radio buttons to set 
+allCharactersButton = Radiobutton(root, text = "All Characters", variable = passwordType, value =0)
+allCharactersButton.grid(row = 2, column = 0, sticky = "E")
+onlyNumbers = Radiobutton(root, text = "Only Numbers", variable = passwordType, value = 1)
+onlyNumbers.grid(row = 2, column = 1, sticky = "E")
 
-#Combo box for length of your password
-combo['values'] = (8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, "Length")
-combo.current(0)
-combo.bind('<<ComboboxSelected>>')
-combo.grid(column = 1, row = 1)
+#Create label and entry to show
+passwordLabel = Label(root, text = "Password")
+passwordLabel.grid(row = 1)
+passwordOutput = Entry(root)
+passwordOutput.grid(row = 1, column = 1)
+
 root.mainloop()
