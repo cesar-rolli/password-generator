@@ -8,9 +8,9 @@ import os
 from PIL import Image
 import pyqrcode
 
-#Image dimensions (this dimensions is capable to read a 400 characters password).
-widthImage = 150
-lengthImage = 150
+#Image dimensions (this dimensions is capable to read a 150 characters password).
+widthImage = 100
+lengthImage = 100
 
 root = Tk()
 lengthEntry = IntVar()
@@ -21,7 +21,7 @@ def copyPasswordToClipboard():
   root.clipboard_clear()
   root.clipboard_append(generatedPassword)
 
-def create():
+def createAction():
   #Create the password.
   password1 = passwordGeneration()
   passwordOutput.insert(10, password1)
@@ -38,9 +38,9 @@ def create():
 
   #Show the password in QR Code.
   qrCodeImage = tk.PhotoImage(file = "passwordInQRCodeResized.png")
-  w = tk.Label(root, image = qrCodeImage)
-  w.qrCodeImage = qrCodeImage
-  w.grid(row = 3, column = 1)
+  qrImage = tk.Label(root, image = qrCodeImage)
+  qrImage.qrCodeImage = qrCodeImage
+  qrImage.grid(row = 1, column = 3)
 
   #Delete created QR Code.
   os.remove("passwordInQRCode.png")
@@ -72,9 +72,9 @@ qrCodeMessageResized = Image.open("qrCodeMessage.png")
 qrCodeMessageResized = qrCodeMessageResized.resize((widthImage, lengthImage),Image.ANTIALIAS)
 qrCodeMessageResized.save(fp="qrCodeMessageResized.png")
 qrCodeImage = tk.PhotoImage(file = "qrCodeMessageResized.png")
-w = tk.Label(root, image = qrCodeImage)
-w.qrCodeImage = qrCodeImage
-w.grid(row = 3, column = 1)
+qrImage = tk.Label(root, image = qrCodeImage)
+qrImage.qrCodeImage = qrCodeImage
+qrImage.grid(row = 1, column = 3)
 
 
 # # GUI # #
@@ -83,27 +83,28 @@ root.title("Password Generator")
 # root.geometry('250x150')
 
 #Create label for length of password.
-lengthLabel = Label(root, text = "Length")
+lengthLabel = Label(root, text = "Length", font = 'Roboto')
 lengthLabel.grid(row = 0, column = 0)
-lengthEntry = Entry(root)
+lengthEntry = Entry(root, font = 'Roboto')
 lengthEntry.grid(row = 0, column = 1)
-generateButton = Button(root, text = "Generate", command = create)
-generateButton.grid(row = 0, column = 2)
+generateButton = Button(root, text = "Generate", command = createAction)
+generateButton.grid(row = 0, column = 4)
+
+#Radio buttons to set.
+allCharactersButton = Radiobutton(root, text = "All Characters", variable = passwordType, value =0)
+allCharactersButton.grid(row = 0, column = 2, sticky = "E")
+onlyNumbers = Radiobutton(root, text = "Only Numbers", variable = passwordType, value = 1)
+onlyNumbers.grid(row = 0, column = 3, sticky = "E")
 
 copy_buttons = Button(root, text = "Copy", command = copyPasswordToClipboard)
 copy_buttons.grid(row = 1, column = 2)
 
-#Radio buttons to set.
-allCharactersButton = Radiobutton(root, text = "All Characters", variable = passwordType, value =0)
-allCharactersButton.grid(row = 2, column = 0, sticky = "E")
-onlyNumbers = Radiobutton(root, text = "Only Numbers", variable = passwordType, value = 1)
-onlyNumbers.grid(row = 2, column = 1, sticky = "E")
-
 #Create label and entry to show.
-passwordLabel = Label(root, text = "Password")
+passwordLabel = Label(root, text = "Password", font = 'Roboto')
 passwordLabel.grid(row = 1)
-passwordOutput = Entry(root)
+passwordOutput = Entry(root, font = 'Roboto')
 passwordOutput.grid(row = 1, column = 1)
 
-
+# root.configure(background = '#111', )
+root.resizable(False, False)
 root.mainloop()
