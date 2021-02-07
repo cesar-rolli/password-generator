@@ -3,6 +3,8 @@ from tkinter import *
 from tkinter.ttk import *
 import tkinter as tk
 
+import os
+
 from PIL import Image
 import pyqrcode
 
@@ -39,6 +41,10 @@ def create():
   w = tk.Label(root, image = qrCodeImage)
   w.qrCodeImage = qrCodeImage
   w.grid(row = 3, column = 1)
+
+  #Delete created QR Code.
+  os.remove("passwordInQRCode.png")
+  os.remove("passwordInQRCodeResized.png")
 
 def passwordGeneration():
   passwordOutput.delete(0, END)
