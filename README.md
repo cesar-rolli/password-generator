@@ -1,5 +1,6 @@
-# password-generator
-A program to generate passwords.
+# Password generator
+An app to generate complex passwords.
 
-# Próximos passos
-1. Refazê-lo em Electron;
+# Next steps:
+1. Rebuild it in Electron;
+2. Save passwords in some DB;
